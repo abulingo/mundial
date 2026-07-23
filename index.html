@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mundial 60 · Marcadores y goleadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cesped:#062B21;
+  --cesped-2:#0A3728;
+  --panel:#0B3B2E;
+  --panel-2:#0F4A39;
+  --tinta:#04201A;
+  --cal:#F2F5EF;
+  --hueso:#A9C2B4;
+  --ambar:#FFC24B;
+  --ambar-2:#E8A62E;
+  --rojo:#E2574C;
+  --linea:rgba(242,245,239,.14);
+  --display:'Anton', 'Haettenschweiler', 'Impact', system-ui, sans-serif;
+  --cond:'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --body:'Barlow', system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--cesped);
+  background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 60px, rgba(0,0,0,.03) 60px 120px);
+  color:var(--cal);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:400;letter-spacing:.01em;text-transform:uppercase}
+button{font-family:var(--cond);cursor:pointer}
+input,select{font-family:var(--body)}
+a{color:var(--ambar)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px 90px}
+
+/* ---------- cabecera ---------- */
+.top{border-bottom:1px solid var(--linea);background:linear-gradient(180deg,var(--tinta),transparent)}
+.top-in{max-width:1180px;margin:0 auto;padding:22px 18px 16px;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+.marca h1{font-size:clamp(32px,6vw,52px);line-height:.92;color:var(--cal)}
+.marca h1 em{font-style:normal;color:var(--ambar)}
+.marca p{margin:6px 0 0;font-family:var(--cond);text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--hueso)}
+.top-acc{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{
+  background:transparent;color:var(--cal);border:1px solid var(--linea);
+  padding:8px 14px;border-radius:2px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;font-weight:600;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.btn:hover{border-color:var(--ambar);color:var(--ambar)}
+.btn.primario{background:var(--ambar);border-color:var(--ambar);color:var(--tinta)}
+.btn.primario:hover{background:var(--ambar-2);border-color:var(--ambar-2);color:var(--tinta)}
+.btn.mini{padding:5px 9px;font-size:12px}
+.btn.peligro:hover{border-color:var(--rojo);color:var(--rojo)}
+.estado{display:inline-flex;align-items:center;gap:7px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--hueso)}
+.punto{width:8px;height:8px;border-radius:50%;background:var(--rojo)}
+.punto.on{background:var(--ambar);box-shadow:0 0 0 4px rgba(255,194,75,.18)}
+
+/* ---------- barra de avance ---------- */
+.avance{max-width:1180px;margin:0 auto;padding:0 18px}
+.avance-in{display:flex;align-items:center;gap:14px;padding:12px 0 16px}
+.barra{flex:1;height:3px;background:var(--linea);position:relative;overflow:hidden}
+.barra span{position:absolute;inset:0 auto 0 0;background:var(--ambar);transition:width .4s ease}
+.avance small{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--hueso);white-space:nowrap}
+
+/* ---------- navegación ---------- */
+nav{position:sticky;top:0;z-index:30;background:rgba(4,32,26,.94);backdrop-filter:blur(8px);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.nav-in{max-width:1180px;margin:0 auto;padding:0 18px;display:flex;gap:2px;overflow-x:auto}
+.tab{
+  background:none;border:0;border-bottom:3px solid transparent;color:var(--hueso);
+  padding:13px 14px;font-size:15px;text-transform:uppercase;letter-spacing:.09em;font-weight:600;white-space:nowrap;
+}
+.tab:hover{color:var(--cal)}
+.tab[aria-selected="true"]{color:var(--ambar);border-bottom-color:var(--ambar)}
+
+/* ---------- secciones ---------- */
+.seccion{padding-top:26px}
+.seccion-cab{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.seccion-cab h2{font-size:26px}
+.seccion-cab p{margin:0;color:var(--hueso);font-size:14px;max-width:62ch}
+
+/* ---------- tarjeta de partido ---------- */
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.partido{background:var(--panel);border:1px solid var(--linea);border-left:3px solid transparent;padding:12px 14px 13px}
+.partido.listo{border-left-color:var(--ambar)}
+.p-cab{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}
+.codigo{font-family:var(--cond);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hueso)}
+.p-cuerpo{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.equipo{min-width:0}
+.equipo .nom{font-family:var(--display);font-size:19px;line-height:1.05;letter-spacing:.005em;word-break:break-word}
+.equipo .nom.vacio{color:var(--hueso);font-family:var(--cond);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.equipo .conf{font-family:var(--cond);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--hueso);margin-top:2px}
+.equipo.der{text-align:right}
+.equipo.gana .nom{color:var(--ambar)}
+.equipo.pierde{opacity:.5}
+.marcador{display:flex;align-items:center;gap:5px}
+.tile{
+  width:50px;height:52px;background:var(--tinta);border:1px solid var(--linea);color:var(--ambar);
+  font-family:var(--display);font-size:26px;text-align:center;border-radius:2px;
+}
+.tile:disabled{color:var(--hueso);opacity:.45}
+.tile:focus{outline:2px solid var(--ambar);outline-offset:1px}
+.guion{color:var(--hueso);font-family:var(--display);font-size:18px}
+.tile::-webkit-outer-spin-button,.tile::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.tile[type=number]{-moz-appearance:textfield}
+.penales{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:9px;font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--hueso)}
+.penales input{width:38px;height:28px;background:var(--tinta);border:1px solid var(--linea);color:var(--cal);text-align:center;border-radius:2px;font-family:var(--cond);font-size:15px}
+.p-pie{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;margin-top:11px;padding-top:10px;border-top:1px dashed var(--linea)}
+.chip{font-family:var(--cond);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--linea);color:var(--hueso);border-radius:999px}
+.chip.ok{border-color:var(--ambar);color:var(--ambar)}
+.chip.alerta{border-color:var(--rojo);color:var(--rojo)}
+
+/* ---------- goleadores dentro del partido ---------- */
+.gol-zona{margin-top:10px}
+.gol-lista{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.gol{display:inline-flex;align-items:center;gap:6px;background:var(--tinta);border:1px solid var(--linea);padding:3px 4px 3px 9px;border-radius:2px;font-size:13px}
+.gol b{font-weight:600}
+.gol small{color:var(--hueso);font-family:var(--cond);letter-spacing:.06em}
+.gol button{background:none;border:0;color:var(--hueso);font-size:15px;line-height:1;padding:2px 4px}
+.gol button:hover{color:var(--rojo)}
+.gol-form{display:grid;grid-template-columns:1fr auto auto auto;gap:5px}
+.gol-form input,.gol-form select{background:var(--tinta);border:1px solid var(--linea);color:var(--cal);padding:6px 7px;border-radius:2px;font-size:13px;min-width:0}
+.gol-form input:focus,.gol-form select:focus{outline:1px solid var(--ambar)}
+.gol-form .n{width:46px;text-align:center}
+
+/* ---------- grupos ---------- */
+.grupos{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:16px}
+.grupo{background:var(--panel);border:1px solid var(--linea)}
+.grupo h3{background:var(--tinta);padding:9px 14px;font-size:17px;display:flex;justify-content:space-between;align-items:center}
+.grupo h3 span{font-family:var(--cond);font-size:12px;letter-spacing:.14em;color:var(--hueso)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 8px;text-align:center;font-size:14px;border-bottom:1px solid var(--linea)}
+th{font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:11px;color:var(--hueso);font-weight:600}
+td.eq{text-align:left;font-family:var(--cond);font-weight:600;font-size:16px;letter-spacing:.02em}
+tr.pos1 td.eq{color:var(--ambar)}
+tr.pos2 td.eq{color:var(--cal)}
+td.pts{font-family:var(--display);color:var(--ambar);font-size:17px}
+.pos{font-family:var(--cond);color:var(--hueso);width:26px}
+.grupo .partidos-g{padding:10px 12px 12px;display:grid;gap:9px}
+
+/* ---------- cuadro final ---------- */
+.cuadro{display:grid;grid-template-columns:repeat(4,minmax(170px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px}
+.col-cuadro h4{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--hueso);margin:0 0 8px;font-weight:600}
+.llave{background:var(--panel);border:1px solid var(--linea);padding:7px 9px;margin-bottom:7px}
+.llave div{display:flex;justify-content:space-between;gap:8px;font-family:var(--cond);font-size:15px;font-weight:600;padding:2px 0}
+.llave div.g{color:var(--ambar)}
+.llave div span:last-child{font-family:var(--display);font-size:15px}
+.llave .vacia{color:var(--hueso);font-weight:500}
+
+/* ---------- campeón ---------- */
+.campeon{margin-top:26px;border:1px solid var(--ambar);background:linear-gradient(180deg,rgba(255,194,75,.1),transparent);padding:30px 24px;text-align:center}
+.campeon small{font-family:var(--cond);text-transform:uppercase;letter-spacing:.3em;font-size:12px;color:var(--ambar)}
+.campeon strong{display:block;font-family:var(--display);font-size:clamp(40px,10vw,86px);line-height:1;margin-top:8px;text-transform:uppercase}
+
+/* ---------- panel de ajustes ---------- */
+.panel{background:var(--panel);border:1px solid var(--linea);padding:18px;margin-top:22px}
+.panel h3{font-size:19px;margin-bottom:6px}
+.panel p{color:var(--hueso);font-size:14px;margin:0 0 14px;max-width:75ch}
+.campo{display:grid;gap:5px;margin-bottom:11px;max-width:620px}
+.campo label{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--hueso)}
+.campo input{background:var(--tinta);border:1px solid var(--linea);color:var(--cal);padding:9px 10px;border-radius:2px;font-size:14px}
+.campo input:focus{outline:1px solid var(--ambar)}
+pre{background:var(--tinta);border:1px solid var(--linea);padding:14px;overflow:auto;font-size:12.5px;line-height:1.55;color:var(--hueso);max-height:420px}
+ol.pasos{color:var(--hueso);font-size:14px;padding-left:20px;max-width:75ch}
+ol.pasos li{margin-bottom:7px}
+ol.pasos b{color:var(--cal)}
+
+/* ---------- goleadores global ---------- */
+.tabla-goles{background:var(--panel);border:1px solid var(--linea)}
+.tabla-goles td.eq{font-family:var(--body);font-weight:500;font-size:14px;color:var(--hueso)}
+.tabla-goles td.jug{text-align:left;font-family:var(--cond);font-size:17px;font-weight:600}
+.tabla-goles tr:first-child td.jug{color:var(--ambar)}
+.vacio-msg{color:var(--hueso);font-size:14px;padding:22px 4px}
+
+/* ---------- ranking y estadísticas ---------- */
+.cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--linea);border:1px solid var(--linea);margin-bottom:20px}
+.cifra{background:var(--panel);padding:14px 16px}
+.cifra b{display:block;font-family:var(--display);font-size:34px;line-height:1;color:var(--ambar)}
+.cifra span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--hueso)}
+.herramientas{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.herramientas select{background:var(--tinta);border:1px solid var(--linea);color:var(--cal);padding:7px 9px;border-radius:2px;font-size:13px}
+.herramientas select:focus{outline:1px solid var(--ambar)}
+.herramientas span{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--hueso)}
+.scroll-x{overflow-x:auto;background:var(--panel);border:1px solid var(--linea)}
+table.rank{min-width:760px}
+table.rank th[data-orden]{cursor:pointer;user-select:none;white-space:nowrap}
+table.rank th[data-orden]:hover{color:var(--cal)}
+table.rank th.activo{color:var(--ambar)}
+table.rank tbody tr:hover td{background:rgba(255,194,75,.05)}
+table.rank td.gc{color:var(--hueso)}
+table.rank tr.vivo td.eq{color:var(--ambar)}
+.corte td{background:var(--tinta);text-align:left;font-family:var(--cond);text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--hueso);padding:6px 10px}
+.corte td b{color:var(--cal);font-weight:600}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:20px}
+.duo .panel{margin-top:0}
+.barra-gol{position:relative;height:5px;background:var(--linea);margin-top:4px}
+.barra-gol span{position:absolute;inset:0 auto 0 0;background:var(--ambar)}
+.barra-gol.contra span{background:var(--rojo)}
+
+/* ---------- avisos ---------- */
+.aviso{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(14px);z-index:80;
+  background:var(--tinta);border:1px solid var(--ambar);color:var(--cal);padding:11px 18px;border-radius:2px;
+  font-family:var(--cond);letter-spacing:.06em;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-width:90vw}
+.aviso.ver{opacity:1;transform:translateX(-50%) translateY(0)}
+.aviso.mal{border-color:var(--rojo)}
+
+@media (max-width:640px){
+  .p-cuerpo{grid-template-columns:1fr;gap:6px;text-align:center}
+  .equipo.der{text-align:center}
+  .marcador{justify-content:center}
+  .gol-form{grid-template-columns:1fr 1fr}
+  .cuadro{grid-template-columns:repeat(4,200px)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ════════ CONFIGURACIÓN RÁPIDA ════════
+     Pega aquí la URL y la clave anon de tu proyecto Supabase
+     para no tener que escribirlas cada vez que abras la página. -->
+<script>
+  const SUPABASE_URL_FIJA  = "https://eylwewhqeaaqkgcxhgyv.supabase.co";  // ej: https://abcdefgh.supabase.co
+  const SUPABASE_KEY_FIJA  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5bHdld2hxZWFhcWtnY3hoZ3l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzMzAxODgsImV4cCI6MjA5OTkwNjE4OH0.Ji8huj-ny2VcMT5UQSjOuwUKz4k23quNS0fLk-gZr7A";  // clave "anon public"
+</script>
+
+<header class="top">
+  <div class="top-in">
+    <div class="marca">
+      <h1>Mundial <em>60</em></h1>
+      <p>Repechaje · 10 grupos · Octavos · Campeón</p>
+    </div>
+    <div class="top-acc">
+      <span class="estado"><span class="punto" id="punto"></span><span id="estadoTxt">Sin conectar</span></span>
+      <button class="btn mini" id="btnRecargar">Recargar</button>
+      <button class="btn mini" id="btnExportar">Exportar copia</button>
+    </div>
+  </div>
+</header>
+
+<div class="avance">
+  <div class="avance-in">
+    <small id="avanceTxt">0 de 76 partidos jugados</small>
+    <div class="barra"><span id="barra" style="width:0%"></span></div>
+    <small id="faseTxt">Ronda preliminar</small>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-in" id="tabs" role="tablist"></div>
+</nav>
+
+<main class="wrap" id="vista"></main>
+
+<div class="aviso" id="aviso"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   1. SELECCIONES  (orden = siembra, 1 el mejor sembrado)
+   ═══════════════════════════════════════════════════════════ */
+const EQUIPOS = [
+  ["Argentina","CONMEBOL"],["España","UEFA"],["Francia","UEFA"],["Inglaterra","UEFA"],
+  ["Brasil","CONMEBOL"],["Portugal","UEFA"],["Países Bajos","UEFA"],["Bélgica","UEFA"],
+  ["Italia","UEFA"],["Alemania","UEFA"],["Croacia","UEFA"],["Marruecos","CAF"],
+  ["Colombia","CONMEBOL"],["Uruguay","CONMEBOL"],["Estados Unidos","CONCACAF"],["México","CONCACAF"],
+  ["Suiza","UEFA"],["Japón","AFC"],["Dinamarca","UEFA"],["Senegal","CAF"],
+  ["Irán","AFC"],["República de Corea","AFC"],["Austria","UEFA"],["Australia","AFC"],
+  ["Ucrania","UEFA"],["Ecuador","CONMEBOL"],["Turquía","UEFA"],["Suecia","UEFA"],
+  ["Gales","UEFA"],["Canadá","CONCACAF"],["Polonia","UEFA"],["Egipto","CAF"],
+  ["Panamá","CONCACAF"],["Noruega","UEFA"],["Escocia","UEFA"],["Hungría","UEFA"],
+  ["Costa de Marfil","CAF"],["Argelia","CAF"],["República Checa","UEFA"],["Nueva Zelanda","OFC"],
+  ["Paraguay","CONMEBOL"],["Túnez","CAF"],["Rumanía","UEFA"],["Islandia","UEFA"],
+  ["Uzbekistán","AFC"],["Qatar","AFC"],["Irak","AFC"],["Irlanda","UEFA"],
+  ["Sudáfrica","CAF"],["Bosnia","UEFA"],["Ghana","CAF"],["Jordania","AFC"],
+  ["Cabo Verde","CAF"],["Finlandia","UEFA"],["Irlanda del Norte","UEFA"],["Arabia Saudita","AFC"],
+  ["Indonesia","AFC"],["Haití","CONCACAF"],["Curazao","CONCACAF"],["República del Congo","CAF"]
+].map((e,i)=>({nombre:e[0], conf:e[1], siembra:i+1}));
+
+const CONF = Object.fromEntries(EQUIPOS.map(e=>[e.nombre,e.conf]));
+const LETRAS = "ABCDEFGHIJ".split("");
+const pad = n => String(n).padStart(2,"0");
+
+/* ═══════════════════════════════════════════════════════════
+   2. CALENDARIO
+   Ronda 1: 1-60, 2-59 ... 30-31  (30 llaves a partido único)
+   Grupos : serpiente -> A: G01,G20,G21 · B: G02,G19,G22 ...
+   ═══════════════════════════════════════════════════════════ */
+const PARTIDOS = [];
+const DEF = {};
+function def(o){ PARTIDOS.push(o); DEF[o.id]=o; return o; }
+
+for(let i=0;i<30;i++){
+  def({
+    id:"E"+pad(i+1), fase:"ronda1", orden:i+1,
+    a:()=>EQUIPOS[i].nombre,           b:()=>EQUIPOS[59-i].nombre,
+    aTxt:EQUIPOS[i].nombre,            bTxt:EQUIPOS[59-i].nombre,
+    ko:true
+  });
+}
+
+const LLAVES_GRUPO = {};
+LETRAS.forEach((L,i)=>{ LLAVES_GRUPO[L] = ["E"+pad(i+1), "E"+pad(20-i), "E"+pad(21+i)]; });
+
+const CRUCES_G = [[0,1],[2,0],[1,2]];
+LETRAS.forEach(L=>{
+  CRUCES_G.forEach((c,j)=>{
+    def({
+      id:"G"+L+(j+1), fase:"grupos", grupo:L, orden:j+1,
+      a:()=>ganador(LLAVES_GRUPO[L][c[0]]), b:()=>ganador(LLAVES_GRUPO[L][c[1]]),
+      aTxt:"Ganador "+LLAVES_GRUPO[L][c[0]], bTxt:"Ganador "+LLAVES_GRUPO[L][c[1]],
+      ko:false
+    });
+  });
+});
+
+const OCTAVOS = [[1,"S6"],[2,"S5"],[3,"S4"],[4,"S3"],[5,"S2"],[6,"S1"],[7,"V10"],[8,"V9"]];
+OCTAVOS.forEach((o,i)=>{
+  const rival = o[1];
+  def({
+    id:"OF"+(i+1), fase:"octavos", orden:i+1,
+    a:()=>mejorPrimero(o[0]),
+    b:()=> rival[0]==="S" ? mejorSegundo(+rival.slice(1)) : mejorPrimero(+rival.slice(1)),
+    aTxt:ordinal(o[0])+" mejor primero",
+    bTxt: rival[0]==="S" ? ordinal(+rival.slice(1))+" mejor segundo" : ordinal(+rival.slice(1))+" mejor primero",
+    ko:true
+  });
+});
+
+[["CF1","OF1","OF8"],["CF2","OF4","OF5"],["CF3","OF3","OF6"],["CF4","OF2","OF7"]].forEach((c,i)=>{
+  def({id:c[0], fase:"cuartos", orden:i+1,
+    a:()=>ganador(c[1]), b:()=>ganador(c[2]),
+    aTxt:"Ganador "+c[1], bTxt:"Ganador "+c[2], ko:true});
+});
+[["SF1","CF1","CF2"],["SF2","CF3","CF4"]].forEach((c,i)=>{
+  def({id:c[0], fase:"semis", orden:i+1,
+    a:()=>ganador(c[1]), b:()=>ganador(c[2]),
+    aTxt:"Ganador "+c[1], bTxt:"Ganador "+c[2], ko:true});
+});
+def({id:"TER", fase:"tercero", orden:1,
+  a:()=>perdedor("SF1"), b:()=>perdedor("SF2"),
+  aTxt:"Perdedor SF1", bTxt:"Perdedor SF2", ko:true});
+def({id:"FIN", fase:"final", orden:1,
+  a:()=>ganador("SF1"), b:()=>ganador("SF2"),
+  aTxt:"Ganador SF1", bTxt:"Ganador SF2", ko:true});
+
+/* ═══════════════════════════════════════════════════════════
+   3. ESTADO
+   ═══════════════════════════════════════════════════════════ */
+const R = {};                    // resultados por id de partido
+const GOLES = [];                // goleadores
+let tabActiva = "ronda1";
+const cfg = { url:(SUPABASE_URL_FIJA||"").replace(/\/+$/,""), key:SUPABASE_KEY_FIJA||"", ok:false };
+
+function res(id){
+  if(!R[id]) R[id] = {id, goles_a:null, goles_b:null, pen_a:null, pen_b:null, jugado:false};
+  return R[id];
+}
+
+/* ── resolución de llaves (con memoria para no recalcular de más) ── */
+const cache = { eq:{}, tb:{} };
+function limpiarCache(){ cache.eq = {}; cache.tb = {}; }
+function equipos(id){
+  if(cache.eq[id]) return cache.eq[id];
+  const d = DEF[id];
+  return cache.eq[id] = { a:d.a()||null, b:d.b()||null, aTxt:d.aTxt, bTxt:d.bTxt };
+}
+function ganador(id){
+  const r = R[id], d = DEF[id];
+  if(!r || !r.jugado) return null;
+  const {a,b} = equipos(id);
+  if(!a || !b) return null;
+  if(r.goles_a > r.goles_b) return a;
+  if(r.goles_b > r.goles_a) return b;
+  if(d.ko){
+    if(r.pen_a > r.pen_b) return a;
+    if(r.pen_b > r.pen_a) return b;
+  }
+  return null;
+}
+function perdedor(id){
+  const g = ganador(id); if(!g) return null;
+  const {a,b} = equipos(id);
+  return g===a ? b : a;
+}
+
+/* ── tabla de un grupo ── */
+function tabla(L){
+  if(cache.tb[L]) return cache.tb[L];
+  const eq = LLAVES_GRUPO[L].map(ganador);
+  const filas = {};
+  eq.forEach(n=>{ if(n) filas[n]={eq:n,pj:0,g:0,e:0,p:0,gf:0,gc:0,pts:0}; });
+  [1,2,3].forEach(j=>{
+    const id = "G"+L+j, r = R[id]; if(!r || !r.jugado) return;
+    const {a,b} = equipos(id); if(!a||!b||!filas[a]||!filas[b]) return;
+    const ga=+r.goles_a, gb=+r.goles_b;
+    filas[a].pj++; filas[b].pj++;
+    filas[a].gf+=ga; filas[a].gc+=gb; filas[b].gf+=gb; filas[b].gc+=ga;
+    if(ga>gb){ filas[a].g++; filas[a].pts+=3; filas[b].p++; }
+    else if(gb>ga){ filas[b].g++; filas[b].pts+=3; filas[a].p++; }
+    else { filas[a].e++; filas[b].e++; filas[a].pts++; filas[b].pts++; }
+  });
+  const arr = Object.values(filas).map(f=>({...f, dg:f.gf-f.gc, grupo:L}));
+  arr.sort((x,y)=> y.pts-x.pts || y.dg-x.dg || y.gf-x.gf || particular(L,x.eq,y.eq) || x.eq.localeCompare(y.eq));
+  return cache.tb[L] = {equipos:eq, filas:arr, completo: eq.every(Boolean) && [1,2,3].every(j=>R["G"+L+j]?.jugado)};
+}
+function particular(L,e1,e2){
+  for(let j=1;j<=3;j++){
+    const id="G"+L+j, r=R[id]; if(!r||!r.jugado) continue;
+    const {a,b}=equipos(id);
+    if((a===e1&&b===e2)||(a===e2&&b===e1)){
+      const g1 = a===e1 ? +r.goles_a : +r.goles_b;
+      const g2 = a===e1 ? +r.goles_b : +r.goles_a;
+      return g2-g1;
+    }
+  }
+  return 0;
+}
+function gruposCompletos(){ return LETRAS.every(L=>tabla(L).completo); }
+function clasificacionPos(pos){
+  if(!gruposCompletos()) return [];
+  const arr = LETRAS.map(L=>tabla(L).filas[pos-1]).filter(Boolean);
+  arr.sort((x,y)=> y.pts-x.pts || y.dg-x.dg || y.gf-x.gf || x.eq.localeCompare(y.eq));
+  return arr;
+}
+function mejorPrimero(n){ const a=clasificacionPos(1); return a[n-1]?a[n-1].eq:null; }
+function mejorSegundo(n){ const a=clasificacionPos(2); return a[n-1]?a[n-1].eq:null; }
+function ordinal(n){ return n+"º"; }
+
+/* ── estadísticas por selección (todo el torneo) ── */
+const ETAPAS = [
+  {fase:"final",   n:4, txt:"Final"},
+  {fase:"semis",   n:5, txt:"Semifinales"},
+  {fase:"cuartos", n:6, txt:"Cuartos de final"},
+  {fase:"octavos", n:7, txt:"Octavos de final"},
+  {fase:"grupos",  n:8, txt:"Fase de grupos"},
+  {fase:"ronda1",  n:9, txt:"Ronda 1"}
+];
+function etapaDe(eq){
+  if(ganador("FIN")===eq)   return {n:0, txt:"Campeón",       vivo:false};
+  if(perdedor("FIN")===eq)  return {n:1, txt:"Subcampeón",    vivo:false};
+  if(ganador("TER")===eq)   return {n:2, txt:"Tercer puesto", vivo:false};
+  if(perdedor("TER")===eq)  return {n:3, txt:"Cuarto puesto", vivo:false};
+  for(const et of ETAPAS){
+    const suyos = PARTIDOS.filter(p=>p.fase===et.fase).filter(p=>{
+      const e = equipos(p.id); return e.a===eq || e.b===eq;
+    });
+    if(!suyos.length) continue;
+    if(et.fase==="grupos"){
+      const vivo = !gruposCompletos() || PARTIDOS.filter(p=>p.fase==="octavos")
+        .some(p=>{ const e=equipos(p.id); return e.a===eq||e.b===eq; });
+      return {n:et.n, txt:et.txt, vivo};
+    }
+    const vivo = suyos.some(p=>!R[p.id]?.jugado) || suyos.some(p=>ganador(p.id)===eq);
+    return {n:et.n, txt:et.txt, vivo};
+  }
+  return {n:10, txt:"Sin partidos", vivo:true};
+}
+function estadisticas(){
+  const m = {};
+  EQUIPOS.forEach(e=> m[e.nombre] = {eq:e.nombre, conf:e.conf,
+    pj:0, g:0, e:0, p:0, gf:0, gc:0, pts:0, pc:0, tandas:0});
+  PARTIDOS.forEach(d=>{
+    const r = R[d.id]; if(!r || !r.jugado) return;
+    const {a,b} = equipos(d.id); if(!a || !b || !m[a] || !m[b]) return;
+    const ga = +r.goles_a, gb = +r.goles_b;
+    m[a].pj++; m[b].pj++;
+    m[a].gf += ga; m[a].gc += gb; m[b].gf += gb; m[b].gc += ga;
+    if(!gb) m[a].pc++;
+    if(!ga) m[b].pc++;
+    if(ga > gb){ m[a].g++; m[a].pts += 3; m[b].p++; }
+    else if(gb > ga){ m[b].g++; m[b].pts += 3; m[a].p++; }
+    else{
+      m[a].e++; m[b].e++; m[a].pts++; m[b].pts++;
+      if(d.ko){ const g = ganador(d.id); if(g){ m[g].tandas++; } }
+    }
+  });
+  return Object.values(m).map(x=>({...x, dg:x.gf-x.gc, etapa:etapaDe(x.eq)}));
+}
+function rankingTorneo(){
+  return estadisticas().sort((x,y)=>
+    x.etapa.n-y.etapa.n || y.pts-x.pts || y.dg-x.dg || y.gf-x.gf || x.eq.localeCompare(y.eq));
+}
+
+/* ── goleadores ── */
+function golesDe(id){ return GOLES.filter(g=>g.partido_id===id); }
+function golesAnotados(id){ return golesDe(id).reduce((s,g)=>s+(+g.goles||0),0); }
+function tablaGoleadores(){
+  const m = {};
+  GOLES.forEach(g=>{
+    const k = (g.jugador||"").trim()+"|"+(g.equipo||"");
+    if(!m[k]) m[k] = {jugador:g.jugador, equipo:g.equipo, goles:0, partidos:new Set()};
+    m[k].goles += (+g.goles||0);
+    m[k].partidos.add(g.partido_id);
+  });
+  return Object.values(m).map(x=>({...x, pj:x.partidos.size}))
+    .sort((a,b)=> b.goles-a.goles || a.pj-b.pj || a.jugador.localeCompare(b.jugador));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. SUPABASE (API REST, sin librerías)
+   ═══════════════════════════════════════════════════════════ */
+async function sb(ruta, opciones={}){
+  if(!cfg.url || !cfg.key) throw new Error("Falta la URL o la clave del proyecto.");
+  const r = await fetch(cfg.url+"/rest/v1/"+ruta, {
+    ...opciones,
+    headers:{ apikey:cfg.key, Authorization:"Bearer "+cfg.key,
+      "Content-Type":"application/json", ...(opciones.headers||{}) }
+  });
+  if(!r.ok) throw new Error((await r.text()).slice(0,220));
+  const t = await r.text();
+  return t ? JSON.parse(t) : null;
+}
+async function conectar(silencio){
+  if(!cfg.url || !cfg.key){ marcarEstado(false,"Sin conectar"); return false; }
+  try{
+    await cargar();
+    cfg.ok = true; marcarEstado(true,"Guardando en Supabase");
+    if(!silencio) avisar("Datos cargados desde Supabase");
+    return true;
+  }catch(e){
+    cfg.ok = false; marcarEstado(false,"Error de conexión");
+    avisar("No se pudo conectar: "+e.message, true);
+    return false;
+  }
+}
+async function cargar(){
+  limpiarCache();
+  const [ps, gs] = await Promise.all([ sb("partidos?select=*"), sb("goleadores?select=*&order=id") ]);
+  Object.keys(R).forEach(k=>delete R[k]);
+  (ps||[]).forEach(p=>{ if(DEF[p.id]) R[p.id]=p; });
+  GOLES.length = 0;
+  (gs||[]).forEach(g=>GOLES.push(g));
+  pintar();
+}
+async function guardarPartido(id){
+  const d = DEF[id], r = res(id), {a,b} = equipos(id);
+  const fila = { id, fase:d.fase, grupo:d.grupo||null, orden:d.orden,
+    equipo_a:a, equipo_b:b, goles_a:r.goles_a, goles_b:r.goles_b,
+    pen_a:r.pen_a, pen_b:r.pen_b, jugado:r.jugado, actualizado:new Date().toISOString() };
+  if(!cfg.ok) return;
+  await sb("partidos", { method:"POST", body:JSON.stringify(fila),
+    headers:{ Prefer:"resolution=merge-duplicates,return=minimal" } });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. ACCIONES
+   ═══════════════════════════════════════════════════════════ */
+async function accionGuardar(id){
+  const r = res(id), d = DEF[id], {a,b} = equipos(id);
+  if(!a || !b){ avisar("Este partido todavía no tiene los dos equipos definidos.", true); return; }
+  if(r.goles_a===null || r.goles_b===null || r.goles_a==="" || r.goles_b===""){
+    avisar("Escribe los goles de los dos equipos.", true); return;
+  }
+  if(d.ko && +r.goles_a === +r.goles_b && (r.pen_a===null||r.pen_b===null||+r.pen_a===+r.pen_b)){
+    avisar("Empate en eliminación directa: define los penales.", true); return;
+  }
+  r.jugado = true;
+  try{ await guardarPartido(id); avisar("Resultado guardado · "+id); }
+  catch(e){ avisar("No se guardó en Supabase: "+e.message, true); }
+  pintar();
+}
+async function accionLimpiar(id){
+  const r = res(id);
+  r.goles_a=r.goles_b=r.pen_a=r.pen_b=null; r.jugado=false;
+  try{ await guardarPartido(id); }catch(e){}
+  pintar(); avisar("Resultado borrado · "+id);
+}
+async function accionAgregarGol(id){
+  const jug = document.getElementById("gj-"+id).value.trim();
+  const eq  = document.getElementById("ge-"+id).value;
+  const n   = Math.max(1, +document.getElementById("gn-"+id).value || 1);
+  const min = document.getElementById("gm-"+id).value.trim();
+  if(!jug){ avisar("Escribe el nombre del goleador.", true); return; }
+  const gol = { partido_id:id, jugador:jug, equipo:eq, goles:n, minuto:min||null };
+  if(cfg.ok){
+    try{
+      await guardarPartido(id);
+      const ins = await sb("goleadores", { method:"POST", body:JSON.stringify(gol),
+        headers:{ Prefer:"return=representation" } });
+      GOLES.push(ins[0]);
+    }catch(e){ avisar("No se guardó el goleador: "+e.message, true); return; }
+  } else {
+    gol.id = "local-"+Date.now()+"-"+Math.random().toString(36).slice(2,7);
+    GOLES.push(gol);
+  }
+  pintar(); avisar("Gol de "+jug+" registrado");
+  const c = document.getElementById("gj-"+id); if(c){ c.focus(); }
+}
+async function accionQuitarGol(golId, partidoId){
+  const i = GOLES.findIndex(g=>String(g.id)===String(golId));
+  if(i<0) return;
+  if(cfg.ok && !String(golId).startsWith("local-")){
+    try{ await sb("goleadores?id=eq."+encodeURIComponent(golId), {method:"DELETE"}); }
+    catch(e){ avisar("No se pudo borrar: "+e.message, true); return; }
+  }
+  GOLES.splice(i,1); pintar(); avisar("Goleador eliminado");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. INTERFAZ
+   ═══════════════════════════════════════════════════════════ */
+const TABS = [
+  {id:"ronda1", txt:"Ronda 1"}, {id:"grupos", txt:"Grupos"}, {id:"octavos", txt:"Octavos"},
+  {id:"cuartos", txt:"Cuartos"}, {id:"semis", txt:"Semis"}, {id:"final", txt:"Final"},
+  {id:"goleadores", txt:"Goleadores"}, {id:"ranking", txt:"Ranking"}, {id:"ajustes", txt:"Base de datos"}
+];
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function pintarTabs(){
+  document.getElementById("tabs").innerHTML = TABS.map(t=>
+    `<button class="tab" role="tab" data-tab="${t.id}" aria-selected="${t.id===tabActiva}">${t.txt}</button>`).join("");
+}
+
+function tarjeta(id){
+  const d = DEF[id], r = res(id), {a,b,aTxt,bTxt} = equipos(id);
+  const listo = r.jugado, g = ganador(id);
+  const clase = x => !listo ? "" : (g===null ? "" : (g===x ? "gana" : "pierde"));
+  const empateKO = d.ko && r.goles_a!==null && r.goles_b!==null && +r.goles_a===+r.goles_b;
+  const sinEquipos = !a || !b;
+  const anot = golesAnotados(id), total = (+r.goles_a||0)+(+r.goles_b||0);
+  const faltan = listo && anot < total;
+
+  const nom = (real, txt, lado) => real
+    ? `<div class="nom">${esc(real)}</div><div class="conf">${esc(CONF[real]||"")}</div>`
+    : `<div class="nom vacio">${esc(txt)}</div>`;
+
+  return `<article class="partido ${listo?"listo":""}">
+    <div class="p-cab">
+      <span class="codigo">${id}${d.grupo?" · Grupo "+d.grupo:""}</span>
+      ${listo ? `<span class="chip ok">Jugado</span>` : `<span class="chip">Pendiente</span>`}
+    </div>
+    <div class="p-cuerpo">
+      <div class="equipo der ${clase(a)}">${nom(a,aTxt)}</div>
+      <div class="marcador">
+        <input class="tile" type="number" min="0" inputmode="numeric" data-campo="goles_a" data-id="${id}"
+          value="${r.goles_a??""}" ${sinEquipos?"disabled":""} aria-label="Goles local">
+        <span class="guion">–</span>
+        <input class="tile" type="number" min="0" inputmode="numeric" data-campo="goles_b" data-id="${id}"
+          value="${r.goles_b??""}" ${sinEquipos?"disabled":""} aria-label="Goles visitante">
+      </div>
+      <div class="equipo ${clase(b)}">${nom(b,bTxt)}</div>
+    </div>
+    ${ empateKO ? `<div class="penales">
+        <span>Penales</span>
+        <input type="number" min="0" data-campo="pen_a" data-id="${id}" value="${r.pen_a??""}" aria-label="Penales local">
+        <span>–</span>
+        <input type="number" min="0" data-campo="pen_b" data-id="${id}" value="${r.pen_b??""}" aria-label="Penales visitante">
+      </div>`:"" }
+    <div class="p-pie">
+      <div style="display:flex;gap:6px">
+        <button class="btn mini primario" data-accion="guardar" data-id="${id}" ${sinEquipos?"disabled":""}>Guardar</button>
+        <button class="btn mini peligro" data-accion="limpiar" data-id="${id}">Borrar</button>
+      </div>
+      ${faltan?`<span class="chip alerta">Faltan ${total-anot} goleador(es)</span>`:""}
+    </div>
+    ${ sinEquipos ? "" : `<div class="gol-zona">
+      ${ golesDe(id).length ? `<div class="gol-lista">${golesDe(id).map(x=>
+        `<span class="gol"><b>${esc(x.jugador)}</b><small>${esc(x.equipo||"")}${x.goles>1?" ×"+x.goles:""}${x.minuto?" · "+esc(x.minuto)+"'":""}</small>
+        <button data-accion="quitargol" data-gol="${esc(x.id)}" data-id="${id}" title="Quitar">×</button></span>`).join("")}</div>`:"" }
+      <div class="gol-form">
+        <input id="gj-${id}" placeholder="Goleador" data-enter="${id}">
+        <select id="ge-${id}"><option value="${esc(a)}">${esc(a)}</option><option value="${esc(b)}">${esc(b)}</option></select>
+        <input id="gn-${id}" class="n" type="number" min="1" value="1" title="Goles">
+        <input id="gm-${id}" class="n" placeholder="min" title="Minuto">
+      </div>
+      <div style="margin-top:6px"><button class="btn mini" data-accion="gol" data-id="${id}">Añadir gol</button></div>
+    </div>`}
+  </article>`;
+}
+
+function vistaFase(fase, titulo, texto){
+  const ids = PARTIDOS.filter(p=>p.fase===fase).map(p=>p.id);
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>${titulo}</h2><p>${texto}</p></div>
+    <div class="rejilla">${ids.map(tarjeta).join("")}</div>
+  </section>`;
+}
+
+function vistaGrupos(){
+  const cuerpo = LETRAS.map(L=>{
+    const t = tabla(L);
+    const filas = t.filas.length ? t.filas.map((f,i)=>`
+      <tr class="pos${i+1}"><td class="pos">${i+1}</td><td class="eq">${esc(f.eq)}</td>
+      <td>${f.pj}</td><td>${f.g}</td><td>${f.e}</td><td>${f.p}</td>
+      <td>${f.gf}:${f.gc}</td><td>${f.dg>0?"+":""}${f.dg}</td><td class="pts">${f.pts}</td></tr>`).join("")
+      : `<tr><td colspan="9" class="vacio-msg" style="text-align:center">Esperando a los ganadores de ${LLAVES_GRUPO[L].join(", ")}</td></tr>`;
+    return `<div class="grupo">
+      <h3>Grupo ${L} <span>${LLAVES_GRUPO[L].join(" · ")}</span></h3>
+      <table><thead><tr><th></th><th style="text-align:left">Selección</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF:GC</th><th>DG</th><th>Pts</th></tr></thead>
+      <tbody>${filas}</tbody></table>
+      <div class="partidos-g">${[1,2,3].map(j=>tarjeta("G"+L+j)).join("")}</div>
+    </div>`;
+  }).join("");
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>Fase de grupos</h2>
+      <p>10 grupos de 3. Todos contra todos a una vuelta. Pasan los 10 primeros y los 6 mejores segundos.
+      Desempates: puntos, diferencia de gol, goles a favor, resultado entre ellos.</p></div>
+    <div class="grupos">${cuerpo}</div>
+    ${vistaClasificados()}
+  </section>`;
+}
+
+function vistaClasificados(){
+  if(!gruposCompletos()) return `<div class="panel"><h3>Clasificados a octavos</h3>
+    <p>Aparecerá el ranking de primeros y segundos cuando estén jugados los 30 partidos de grupos.</p></div>`;
+  const p = clasificacionPos(1), s = clasificacionPos(2);
+  const fila = (f,i,corte)=>`<tr class="${corte&&i>=6?"":"pos1"}"><td class="pos">${i+1}</td><td class="eq">${esc(f.eq)}</td>
+    <td>${f.grupo}</td><td>${f.pts}</td><td>${f.dg>0?"+":""}${f.dg}</td><td>${f.gf}</td>
+    <td>${corte ? (i<6?"Clasifica":"Eliminado") : "Clasifica"}</td></tr>`;
+  return `<div class="panel"><h3>Clasificados a octavos</h3>
+    <p>Los 10 primeros ordenados por rendimiento y los 6 mejores segundos.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+      <div><h4 style="font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--hueso)">Primeros de grupo</h4>
+      <table><thead><tr><th></th><th style="text-align:left">Selección</th><th>Gr</th><th>Pts</th><th>DG</th><th>GF</th><th>Estado</th></tr></thead>
+      <tbody>${p.map((f,i)=>fila(f,i,false)).join("")}</tbody></table></div>
+      <div><h4 style="font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--hueso)">Segundos de grupo</h4>
+      <table><thead><tr><th></th><th style="text-align:left">Selección</th><th>Gr</th><th>Pts</th><th>DG</th><th>GF</th><th>Estado</th></tr></thead>
+      <tbody>${s.map((f,i)=>fila(f,i,true)).join("")}</tbody></table></div>
+    </div></div>`;
+}
+
+function vistaFinal(){
+  const camp = ganador("FIN");
+  const col = (titulo, ids) => `<div class="col-cuadro"><h4>${titulo}</h4>${ids.map(id=>{
+    const {a,b,aTxt,bTxt} = equipos(id), r = res(id), g = ganador(id);
+    const linea = (n,txt,gol)=>`<div class="${g&&g===n?"g":""}">
+      <span class="${n?"":"vacia"}">${esc(n||txt)}</span><span>${gol??""}</span></div>`;
+    return `<div class="llave">${linea(a,aTxt,r.jugado?r.goles_a:null)}${linea(b,bTxt,r.jugado?r.goles_b:null)}</div>`;
+  }).join("")}</div>`;
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>Final y tercer puesto</h2>
+      <p>El cuadro se completa solo a medida que guardas los resultados.</p></div>
+    <div class="rejilla">${["FIN","TER"].map(tarjeta).join("")}</div>
+    ${camp?`<div class="campeon"><small>Campeón del mundo</small><strong>${esc(camp)}</strong></div>`:""}
+    <div class="seccion-cab" style="margin-top:30px"><h2>Cuadro de eliminación</h2></div>
+    <div class="cuadro">
+      ${col("Octavos",["OF1","OF8","OF4","OF5","OF3","OF6","OF2","OF7"])}
+      ${col("Cuartos",["CF1","CF2","CF3","CF4"])}
+      ${col("Semifinales",["SF1","SF2"])}
+      ${col("Final",["FIN"])}
+    </div>
+  </section>`;
+}
+
+function vistaGoleadores(){
+  const t = tablaGoleadores();
+  const total = t.reduce((s,x)=>s+x.goles,0);
+  if(!t.length) return `<section class="seccion"><div class="seccion-cab"><h2>Bota de oro</h2>
+    <p>Todavía no hay goleadores. Añádelos desde cada partido y aparecerán aquí.</p></div></section>`;
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>Bota de oro</h2><p>${total} goles registrados por ${t.length} jugadores.</p></div>
+    <div class="tabla-goles"><table>
+      <thead><tr><th></th><th style="text-align:left">Jugador</th><th style="text-align:left">Selección</th><th>PJ</th><th>Goles</th></tr></thead>
+      <tbody>${t.map((x,i)=>`<tr><td class="pos">${i+1}</td><td class="jug">${esc(x.jugador)}</td>
+        <td class="eq" style="text-align:left">${esc(x.equipo||"")}</td><td>${x.pj}</td><td class="pts">${x.goles}</td></tr>`).join("")}</tbody>
+    </table></div>
+  </section>`;
+}
+
+let ordenRank = {campo:"pos", asc:false};
+let filtroConf = "todas";
+const BLOQUES = ["Campeón","Subcampeón","Tercer puesto","Cuarto puesto","Finalistas","Semifinalistas",
+  "Cuartos de final","Octavos de final","Fase de grupos","Ronda 1","Sin partidos"];
+const COLS = [
+  {k:"pos",   t:"#",           num:true},
+  {k:"eq",    t:"Selección",   izq:true},
+  {k:"conf",  t:"Conf",        izq:true},
+  {k:"etapa", t:"Llegó hasta", izq:true},
+  {k:"pj",    t:"PJ"}, {k:"g", t:"G"}, {k:"e", t:"E"}, {k:"p", t:"P"},
+  {k:"gf",    t:"GF"}, {k:"gc", t:"GC"}, {k:"dg", t:"DG"}, {k:"pts", t:"Pts"}
+];
+
+function vistaRanking(){
+  const base = rankingTorneo();
+  const pos = {}; base.forEach((f,i)=>pos[f.eq] = i+1);
+
+  let filas = filtroConf==="todas" ? base.slice() : base.filter(f=>f.conf===filtroConf);
+  const c = ordenRank.campo;
+  if(c !== "pos"){
+    const val = f => c==="etapa" ? f.etapa.n : f[c];
+    filas.sort((x,y)=>{
+      const a = val(x), b = val(y);
+      const cmp = (typeof a === "string") ? a.localeCompare(b) : b-a;
+      return (ordenRank.asc ? -cmp : cmp) || x.eq.localeCompare(y.eq);
+    });
+  }
+
+  const jugados = PARTIDOS.filter(p=>R[p.id]?.jugado).length;
+  const golesTot = base.reduce((s,f)=>s+f.gf,0);
+  const vallas = base.reduce((s,f)=>s+f.pc,0);
+  const prom = jugados ? (golesTot/jugados).toFixed(2) : "0.00";
+
+  let cuerpo = "", bloqueAct = -1;
+  filas.forEach(f=>{
+    if(c==="pos" && f.etapa.n !== bloqueAct){
+      bloqueAct = f.etapa.n;
+      const n = filas.filter(x=>x.etapa.n===bloqueAct).length;
+      cuerpo += `<tr class="corte"><td colspan="4"><b>${BLOQUES[bloqueAct]}</b></td>
+        <td colspan="8" style="text-align:right">${n} ${n===1?"selección":"selecciones"}</td></tr>`;
+    }
+    cuerpo += `<tr class="${f.etapa.vivo && f.etapa.n>3 ? "vivo":""}">
+      <td class="pos">${pos[f.eq]}</td>
+      <td class="eq">${esc(f.eq)}</td>
+      <td style="text-align:left;color:var(--hueso);font-size:12px;letter-spacing:.08em">${esc(f.conf)}</td>
+      <td style="text-align:left;color:var(--hueso);font-size:13px">${esc(f.etapa.txt)}${f.tandas?` <span class="chip" style="padding:1px 6px">${f.tandas} penales</span>`:""}</td>
+      <td>${f.pj}</td><td>${f.g}</td><td>${f.e}</td><td>${f.p}</td>
+      <td>${f.gf}</td><td class="gc">${f.gc}</td>
+      <td>${f.dg>0?"+":""}${f.dg}</td><td class="pts">${f.pts}</td></tr>`;
+  });
+
+  const cabeza = COLS.map(col=>`<th data-orden="${col.k}" class="${c===col.k?"activo":""}"
+    style="${col.izq?"text-align:left":""}">${col.t}${c===col.k&&c!=="pos"?(ordenRank.asc?" ↑":" ↓"):""}</th>`).join("");
+
+  const conPj = base.filter(f=>f.pj>0);
+  const topPJ = Math.max(0, ...conPj.map(f=>f.pj));
+  const minPJ = topPJ >= 3 ? 3 : 1;   // exige haber pasado de la ronda 1 cuando ya se puede
+  const elegibles = conPj.filter(f=>f.pj>=minPJ);
+  const prm = f => f.pj ? f.gf/f.pj : 0;
+  const prc = f => f.pj ? f.gc/f.pj : 0;
+
+  const ataque  = base.slice().sort((x,y)=> y.gf-x.gf || y.dg-x.dg || x.eq.localeCompare(y.eq)).slice(0,10);
+  const defensa = elegibles.slice().sort((x,y)=> prc(x)-prc(y) || x.gc-y.gc || y.pj-x.pj || x.eq.localeCompare(y.eq)).slice(0,10);
+  const maxGf = Math.max(1, ...ataque.map(f=>f.gf));
+  const maxGc = Math.max(1, ...defensa.map(f=>f.gc));
+
+  const lista = (arr, campo, clase, max, media) => arr.length ? arr.map((f,i)=>`
+    <div style="margin-bottom:9px">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+        <span style="font-family:var(--cond);font-weight:600;font-size:16px">
+          <span style="color:var(--hueso);font-size:13px">${i+1}.</span> ${esc(f.eq)}
+          <span style="color:var(--hueso);font-size:12px">· ${f.pj} PJ · ${media(f).toFixed(2)} por partido</span></span>
+        <b style="font-family:var(--display);font-size:18px;color:${clase==="contra"?"var(--rojo)":"var(--ambar)"}">${f[campo]}</b>
+      </div>
+      <div class="barra-gol ${clase}"><span style="width:${Math.round(f[campo]/max*100)}%"></span></div>
+    </div>`).join("") : `<p class="vacio-msg">Sin partidos jugados todavía.</p>`;
+
+  const confs = ["todas", ...new Set(EQUIPOS.map(e=>e.conf))];
+
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>Ranking del torneo</h2>
+      <p>Las 60 selecciones ordenadas por lo lejos que llegaron y, dentro de cada tramo, por puntos,
+      diferencia de gol y goles a favor. Las tandas de penales cuentan como empate, igual que en el reglamento FIFA.</p></div>
+
+    <div class="cifras">
+      <div class="cifra"><b>${jugados}</b><span>Partidos jugados</span></div>
+      <div class="cifra"><b>${golesTot}</b><span>Goles anotados</span></div>
+      <div class="cifra"><b>${prom}</b><span>Goles por partido</span></div>
+      <div class="cifra"><b>${vallas}</b><span>Porterías a cero</span></div>
+    </div>
+
+    <div class="herramientas">
+      <span>Confederación</span>
+      <select id="filtroConf">${confs.map(x=>`<option value="${x}" ${x===filtroConf?"selected":""}>${x==="todas"?"Todas":x}</option>`).join("")}</select>
+      <span style="margin-left:auto">Toca una columna para reordenar</span>
+    </div>
+
+    <div class="scroll-x"><table class="rank"><thead><tr>${cabeza}</tr></thead><tbody>${cuerpo}</tbody></table></div>
+
+    <div class="duo">
+      <div class="panel"><h3>Goles a favor</h3>
+        <p>Las 10 selecciones más goleadoras del torneo.</p>${lista(ataque,"gf","",maxGf,prm)}</div>
+      <div class="panel"><h3>Goles en contra</h3>
+        <p>Las 10 vallas menos batidas, por promedio de goles recibidos${minPJ>1?", entre las que superaron la ronda 1":""}.</p>${lista(defensa,"gc","contra",maxGc,prc)}</div>
+    </div>
+  </section>`;
+}
+
+const SQL = `-- Ejecuta esto en Supabase › SQL Editor › New query
+
+create table if not exists partidos (
+  id          text primary key,
+  fase        text,
+  grupo       text,
+  orden       int,
+  equipo_a    text,
+  equipo_b    text,
+  goles_a     int,
+  goles_b     int,
+  pen_a       int,
+  pen_b       int,
+  jugado      boolean default false,
+  actualizado timestamptz default now()
+);
+
+create table if not exists goleadores (
+  id          bigint generated always as identity primary key,
+  partido_id  text references partidos(id) on delete cascade,
+  jugador     text not null,
+  equipo      text,
+  goles       int not null default 1,
+  minuto      text,
+  creado      timestamptz default now()
+);
+
+create index if not exists idx_goleadores_partido on goleadores(partido_id);
+
+alter table partidos   enable row level security;
+alter table goleadores enable row level security;
+
+-- Acceso abierto con la clave anon: cualquiera con la página puede escribir.
+create policy "lectura y escritura partidos"   on partidos   for all to anon using (true) with check (true);
+create policy "lectura y escritura goleadores" on goleadores for all to anon using (true) with check (true);`;
+
+function vistaAjustes(){
+  return `<section class="seccion">
+    <div class="seccion-cab"><h2>Base de datos</h2>
+      <p>Conecta el torneo a tu proyecto de Supabase para que los marcadores y goleadores queden guardados y los vea todo el que abra la página.</p></div>
+    <div class="panel">
+      <h3>Conexión</h3>
+      <p>Copia los dos datos desde Supabase › Project Settings › Data API. La clave <b>anon public</b> es la correcta.</p>
+      <div class="campo"><label>URL del proyecto</label>
+        <input id="cfgUrl" placeholder="https://tuproyecto.supabase.co" value="${esc(cfg.url)}"></div>
+      <div class="campo"><label>Clave anon public</label>
+        <input id="cfgKey" placeholder="eyJhbGciOi..." value="${esc(cfg.key)}"></div>
+      <button class="btn primario" id="btnConectar">Conectar</button>
+      <p style="margin-top:12px">Para no escribirlos cada vez, pégalos en las constantes <b>SUPABASE_URL_FIJA</b> y <b>SUPABASE_KEY_FIJA</b> al inicio del archivo HTML.</p>
+    </div>
+    <div class="panel">
+      <h3>Tablas</h3>
+      <p>Crea las dos tablas una sola vez con este script.</p>
+      <pre>${esc(SQL)}</pre>
+      <button class="btn" id="btnCopiarSql">Copiar script</button>
+    </div>
+    <div class="panel">
+      <h3>Puesta en marcha</h3>
+      <ol class="pasos">
+        <li>Crea un proyecto gratis en <b>supabase.com</b>.</li>
+        <li>Abre <b>SQL Editor</b>, pega el script de arriba y ejecútalo.</li>
+        <li>Vuelve aquí, pega la URL y la clave anon, y pulsa <b>Conectar</b>.</li>
+        <li>Sube el archivo a cualquier hosting estático (Netlify, Vercel, GitHub Pages) y compártelo.</li>
+      </ol>
+      <p>Si prefieres trabajar sin base de datos, la página funciona igual: los resultados viven en el navegador hasta que recargas. Usa <b>Exportar copia</b> para descargar un respaldo en JSON.</p>
+      <button class="btn peligro" id="btnReiniciar">Reiniciar torneo</button>
+    </div>
+  </section>`;
+}
+
+function pintar(){
+  limpiarCache();
+  pintarTabs();
+  const v = document.getElementById("vista");
+  const vistas = {
+    ronda1: ()=>vistaFase("ronda1","Ronda 1 · eliminación directa",
+      "30 llaves a partido único con siembra 1-60, 2-59… Los 30 ganadores forman los grupos. Si hay empate, define los penales."),
+    grupos: vistaGrupos,
+    octavos: ()=>vistaFase("octavos","Octavos de final",
+      "Los 10 primeros de grupo y los 6 mejores segundos. Los cruces se ordenan por rendimiento: el mejor primero enfrenta al peor segundo clasificado."),
+    cuartos: ()=>vistaFase("cuartos","Cuartos de final","Cuatro llaves. Los cruces salen del cuadro de octavos."),
+    semis: ()=>vistaFase("semis","Semifinales","Dos llaves. Los perdedores juegan el tercer puesto."),
+    final: vistaFinal,
+    goleadores: vistaGoleadores,
+    ranking: vistaRanking,
+    ajustes: vistaAjustes
+  };
+  v.innerHTML = vistas[tabActiva]();
+  actualizarAvance();
+}
+
+function actualizarAvance(){
+  const jug = PARTIDOS.filter(p=>R[p.id]?.jugado).length;
+  const pct = Math.round(jug/PARTIDOS.length*100);
+  document.getElementById("avanceTxt").textContent = jug+" de "+PARTIDOS.length+" partidos jugados";
+  document.getElementById("barra").style.width = pct+"%";
+  const camp = ganador("FIN");
+  const faseAct = camp ? "Campeón: "+camp
+    : PARTIDOS.filter(p=>p.fase==="ronda1").some(p=>!R[p.id]?.jugado) ? "Ronda preliminar"
+    : !gruposCompletos() ? "Fase de grupos"
+    : PARTIDOS.filter(p=>p.fase==="octavos").some(p=>!R[p.id]?.jugado) ? "Octavos de final"
+    : PARTIDOS.filter(p=>p.fase==="cuartos").some(p=>!R[p.id]?.jugado) ? "Cuartos de final"
+    : PARTIDOS.filter(p=>p.fase==="semis").some(p=>!R[p.id]?.jugado) ? "Semifinales" : "Final";
+  document.getElementById("faseTxt").textContent = faseAct;
+}
+
+function marcarEstado(ok, txt){
+  document.getElementById("punto").className = "punto"+(ok?" on":"");
+  document.getElementById("estadoTxt").textContent = txt;
+}
+let avisoT;
+function avisar(txt, mal){
+  const a = document.getElementById("aviso");
+  a.textContent = txt; a.className = "aviso ver"+(mal?" mal":"");
+  clearTimeout(avisoT); avisoT = setTimeout(()=>a.className="aviso"+(mal?" mal":""), 3200);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. EVENTOS
+   ═══════════════════════════════════════════════════════════ */
+document.getElementById("tabs").addEventListener("click", e=>{
+  const b = e.target.closest("[data-tab]"); if(!b) return;
+  tabActiva = b.dataset.tab; pintar(); window.scrollTo({top:0, behavior:"smooth"});
+});
+document.addEventListener("input", e=>{
+  const t = e.target;
+  if(t.dataset && t.dataset.campo && t.dataset.id){
+    limpiarCache();
+    const r = res(t.dataset.id);
+    r[t.dataset.campo] = t.value === "" ? null : Math.max(0, parseInt(t.value,10) || 0);
+    if(DEF[t.dataset.id].ko && (t.dataset.campo==="goles_a"||t.dataset.campo==="goles_b")){
+      const necesita = r.goles_a!==null && r.goles_b!==null && +r.goles_a===+r.goles_b;
+      const hay = !!t.closest(".partido").querySelector(".penales");
+      if(necesita !== hay) pintarUnPartido(t.dataset.id, t.dataset.campo);
+    }
+  }
+});
+function pintarUnPartido(id, campoFoco){
+  limpiarCache();
+  const art = document.querySelector(`[data-accion="guardar"][data-id="${id}"]`)?.closest(".partido");
+  if(!art) return;
+  const tmp = document.createElement("div"); tmp.innerHTML = tarjeta(id);
+  const nuevo = tmp.firstElementChild;
+  art.replaceWith(nuevo);
+  if(campoFoco){
+    const f = nuevo.querySelector(`[data-campo="${campoFoco}"]`);
+    if(f){ f.focus(); f.select && f.select(); }
+  }
+}
+document.addEventListener("click", e=>{
+  const th = e.target.closest("[data-orden]");
+  if(th){
+    const k = th.dataset.orden;
+    if(k === "pos") ordenRank = {campo:"pos", asc:false};
+    else if(ordenRank.campo === k) ordenRank.asc = !ordenRank.asc;
+    else ordenRank = {campo:k, asc: (k==="gc" || k==="eq" || k==="conf" || k==="etapa")};
+    pintar(); return;
+  }
+  const b = e.target.closest("[data-accion]"); if(!b) return;
+  const id = b.dataset.id;
+  if(b.dataset.accion==="guardar") accionGuardar(id);
+  if(b.dataset.accion==="limpiar") accionLimpiar(id);
+  if(b.dataset.accion==="gol") accionAgregarGol(id);
+  if(b.dataset.accion==="quitargol") accionQuitarGol(b.dataset.gol, id);
+  if(b.id==="btnConectar"){
+    cfg.url = document.getElementById("cfgUrl").value.trim().replace(/\/+$/,"");
+    cfg.key = document.getElementById("cfgKey").value.trim();
+    conectar();
+  }
+  if(b.id==="btnCopiarSql"){
+    navigator.clipboard.writeText(SQL).then(()=>avisar("Script copiado"), ()=>avisar("Copia manual el script", true));
+  }
+  if(b.id==="btnReiniciar"){
+    if(!confirm("Se borran todos los marcadores y goleadores. ¿Continuar?")) return;
+    reiniciar();
+  }
+});
+document.addEventListener("change", e=>{
+  if(e.target.id === "filtroConf"){ filtroConf = e.target.value; pintar(); }
+});
+document.addEventListener("keydown", e=>{
+  if(e.key==="Enter" && e.target.dataset && e.target.dataset.enter) accionAgregarGol(e.target.dataset.enter);
+});
+document.getElementById("btnRecargar").addEventListener("click", ()=>{
+  if(cfg.ok) cargar().then(()=>avisar("Datos actualizados")).catch(e=>avisar(e.message,true));
+  else { conectar(); }
+});
+document.getElementById("btnExportar").addEventListener("click", ()=>{
+  const datos = JSON.stringify({partidos:R, goleadores:GOLES, fecha:new Date().toISOString()}, null, 2);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([datos],{type:"application/json"}));
+  a.download = "mundial60-respaldo.json"; a.click();
+  avisar("Copia descargada");
+});
+async function reiniciar(){
+  if(cfg.ok){
+    try{
+      await sb("goleadores?id=gt.0", {method:"DELETE"});
+      await sb("partidos?id=neq.__", {method:"DELETE"});
+    }catch(e){ avisar("No se pudo limpiar la base: "+e.message, true); }
+  }
+  Object.keys(R).forEach(k=>delete R[k]); GOLES.length = 0;
+  pintar(); avisar("Torneo reiniciado");
+}
+
+/* ── arranque ── */
+pintar();
+marcarEstado(false, "Modo local · sin guardar");
+if(cfg.url && cfg.key) conectar(true).then(ok=>{ if(!ok) marcarEstado(false,"Modo local · sin guardar"); });
+</script>
+</body>
+</html>
